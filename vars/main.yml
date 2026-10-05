@@ -1,0 +1,6 @@
+---
+lighthouse_nginx_conf: "/etc/nginx/sites-available/lighthouse.conf"
+lighthouse_required_packages:
+  - nginx
+  - unzip
+

@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  author: Chehlov1M
+  description: Deploy LightHouse static UI for logs
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms:
+    - name: Ubuntu
+      versions: [focal, jammy]
+  galaxy_tags: [lighthouse, observability, nginx]
+dependencies: []
+

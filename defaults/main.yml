@@ -1,0 +1,6 @@
+---
+lighthouse_version: "1.0.0"
+lighthouse_web_root: "/var/www/lighthouse"
+lighthouse_nginx_port: 80
+lighthouse_server_name: "_"
+

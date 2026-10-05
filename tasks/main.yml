@@ -1,0 +1,46 @@
+---
+- name: Install required packages
+  ansible.builtin.apt:
+    name: "{{ lighthouse_required_packages }}"
+    state: present
+    update_cache: true
+
+- name: Create web root
+  ansible.builtin.file:
+    path: "{{ lighthouse_web_root }}"
+    state: directory
+    mode: "0755"
+
+- name: Download and unpack lighthouse
+  ansible.builtin.unarchive:
+    src: "https://github.com/VKCOM/lighthouse/archive/refs/tags/v{{ lighthouse_version }}.tar.gz"
+    dest: "{{ lighthouse_web_root }}"
+    remote_src: true
+    extra_opts: ["--strip-components=1"]
+
+- name: Deploy nginx config
+  ansible.builtin.template:
+    src: lighthouse.conf.j2
+    dest: "{{ lighthouse_nginx_conf }}"
+    mode: "0644"
+  notify: Restart nginx
+
+- name: Enable lighthouse site
+  ansible.builtin.file:
+    src: "{{ lighthouse_nginx_conf }}"
+    dest: "/etc/nginx/sites-enabled/lighthouse.conf"
+    state: link
+  notify: Restart nginx
+
+- name: Remove default site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Restart nginx
+
+- name: Start nginx
+  ansible.builtin.systemd:
+    name: nginx
+    enabled: true
+    state: started
+
